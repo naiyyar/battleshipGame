@@ -1,4 +1,4 @@
-require 'player.rb'
+require_relative './player.rb'
 
 # Need to take inputs 
   # grid size
@@ -22,6 +22,11 @@ class Game
     # get p1 & p2 ships positions and place ships on the grid
     p1_ships_positions = get_p1_ships_positions
     p2_ships_positions = get_p2_ships_positions
+
+    player1.postions_ships(p1_ships_positions)
+    player2.postions_ships(p2_ships_positions)
+
+    player1.display_grid
   end
 
   private
@@ -38,22 +43,12 @@ class Game
 
   def get_p1_ships_positions
     puts 'Enter player1 ships positions (x,y pairs separated by colon, eg; 1,1:2,0:2,3:3,4,...):'
-    pos = gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
-    if pos.length != @ships_size
-      puts 'Ships postions should be equal to number of ships.'
-      pos = gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
-    end
-    pos
+    gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
   end
 
   def get_p2_ships_positions
-    puts 'Enter player2 ships positions (x,y pairs separated by colon eg; 1,1:2,0:2,3:3,4,...):'
-    pos = gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
-    if pos.length != @ships_size
-      puts 'Ships postions should be equal to number of ships.'
-      pos = gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
-    end
-    pos
+    puts 'Enter player2 ships positions (x,y pairs separated by colon, eg; 1,1:2,0:2,3:3,4,...):'
+    gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
   end
 
 end
