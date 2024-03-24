@@ -14,7 +14,7 @@ class Player
     positions.each do |position|
       # position => [1,2]
       row, col = position
-      @grid[row][col] = 'B'
+      @grids[row][col] = 'B'
     end
   end
 end
