@@ -6,11 +6,10 @@
 class Player
   attr_accessor :name, :hits_count
   
-  def initialize name:, grid_size:, moves:
+  def initialize name:, grid_size:
     @name = name
     @grids = Array.new(grid_size){ Array.new(grid_size, '_') }
     @hits_count = 0
-    @move = moves
   end
 
   def display_grid
@@ -26,7 +25,6 @@ class Player
   end
 
   def hit(row, col)
-    # byebug
     if @grids[row][col] == 'B'
       @grids[row][col] = 'X'
       self.hits_count += 1
@@ -37,6 +35,6 @@ class Player
 
   def get_moves
     puts "Enter #{name} moves (x,y pairs separated by colon, eg; 1,1:2,0:2,3:3,4,..):"
-    @move.split(':').map{|rc| rc.split(",").map(&:to_i)}
+    gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
   end
 end

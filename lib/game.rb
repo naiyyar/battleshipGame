@@ -11,18 +11,17 @@ require_relative './player.rb'
 
 class Game
   def initialize
-    @grid_size = 5 || get_grid_size
-    @total_ships = 5 || get_ship_size
+    @grid_size = get_grid_size
+    @total_ships = get_ship_size
     @player1_hits = @player2_hits = 0
-    @player1 = Player.new(name: 'Player 1', grid_size: @grid_size, moves: '0,1:4,3:2,3:3,1:4,1')
-    @player2 = Player.new(name: 'Player 2', grid_size: @grid_size, moves: '0,1:0,0:1,1:2,3:4,3')
+    @player1 = Player.new(name: 'Player 1', grid_size: @grid_size)
+    @player2 = Player.new(name: 'Player 2', grid_size: @grid_size)
   end
 
   def start
-    # get p1 & p2 ships positions and place ships on the grid
     place_ships
 
-    total_missiles = 5 || get_total_missiles
+    total_missiles = get_total_missiles
 
     if total_missiles <= 0
       puts "Number of missiles should be greater than 0"
@@ -34,16 +33,14 @@ class Game
 
     puts "Player 1's turn:"
     @player2.display_grid
-    p2_moves.each do |move|
-      has_hit = @player1.hit(*move)
-    end
+    p2_moves.each{|move| @player1.hit(*move) }
 
     puts "Player 2's turn:"
     @player1.display_grid
-    p1_moves.each do |move|
-      has_hit = @player2.hit(*move)
-    end
-    
+    p1_moves.each {|move| @player2.hit(*move) }
+
+    @player1_hits, @player2_hits = @player1.hits_count, @player2.hits_count
+
     display_results
   end
 
@@ -56,8 +53,8 @@ class Game
     puts 'Player1'
     print @player2.display_grid
     puts ''
-    puts "P1:#{@player1.hits_count}"
-    puts "P2:#{@player2.hits_count}"
+    puts "P1:#{@player1_hits}"
+    puts "P2:#{@player2_hits}"
     
     if @player1_hits > @player2_hits
       puts 'Player 1 wins'
@@ -68,6 +65,7 @@ class Game
     end
   end
 
+  # get p1 & p2 ships positions and place ships on the grid
   def place_ships
     @player1.position_ships(get_p1_ships_positions)
     @player2.position_ships(get_p2_ships_positions)
@@ -85,12 +83,12 @@ class Game
 
   def get_p1_ships_positions
     puts 'Enter player1 ships positions (x,y pairs separated by colon, eg; 1,1:2,0:2,3:3,4,...):'
-    '1,1:2,0:2,3:3,4:4,3'.split(':').map{|rc| rc.split(",").map(&:to_i)}
+    gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
   end
 
   def get_p2_ships_positions
     puts 'Enter player2 ships positions (x,y pairs separated by colon, eg; 1,1:2,0:2,3:3,4,...):'
-    '0,1:2,3:3,0:3,4:4,1'.split(':').map{|rc| rc.split(",").map(&:to_i)}
+    gets.chomp.split(':').map{|rc| rc.split(",").map(&:to_i)}
   end
 
   def get_total_missiles
