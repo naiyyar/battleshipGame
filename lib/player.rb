@@ -4,7 +4,7 @@
 # get moves
 
 class Player
-  attr_accessor :name, :hits_count
+  attr_accessor :name, :hits_count, :grids
   
   def initialize name:, grid_size:
     @name = name

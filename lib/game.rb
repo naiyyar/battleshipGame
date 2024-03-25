@@ -10,9 +10,10 @@ require_relative './player.rb'
 # place player1 and 2 grids
 
 class Game
+  attr_reader :grid_size
+
   def initialize
     @grid_size = get_grid_size
-    @total_ships = get_ship_size
     @player1_hits = @player2_hits = 0
     @player1 = Player.new(name: 'Player 1', grid_size: @grid_size)
     @player2 = Player.new(name: 'Player 2', grid_size: @grid_size)
@@ -41,7 +42,7 @@ class Game
 
     @player1_hits, @player2_hits = @player1.hits_count, @player2.hits_count
 
-    display_results
+    puts display_results
   end
 
   private
@@ -56,28 +57,31 @@ class Game
     puts "P1:#{@player1_hits}"
     puts "P2:#{@player2_hits}"
     
-    if @player1_hits > @player2_hits
-      puts 'Player 1 wins'
+    result = if @player1_hits > @player2_hits
+      'Player 1 wins'
     elsif @player2_hits > @player1_hits
-      puts 'Player 2 wins'
+      'Player 2 wins'
     else
-      puts 'It is a draw'
+      'It is a draw'
     end
+    result
   end
 
   # get p1 & p2 ships positions and place ships on the grid
   def place_ships
+    get_ship_size
+
     @player1.position_ships(get_p1_ships_positions)
     @player2.position_ships(get_p2_ships_positions)
   end
 
   def get_grid_size
-    puts 'Enter grid size (e.g., 4):'
+    puts 'Enter grid size (e.g., 4): '
     gets.chomp.to_i
   end
 
   def get_ship_size
-    puts 'Enter grid size (e.g., 4):'
+    puts 'Enter ship size (e.g., 4): '
     gets.chomp.to_i
   end
 
