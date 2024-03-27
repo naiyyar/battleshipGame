@@ -11,10 +11,12 @@ require_relative './player.rb'
 
 class Game
   attr_reader :grid_size
+  attr_accessor :total_missiles
 
-  def initialize
-    @grid_size = get_grid_size
+  def initialize grids_size: nil
+    @grid_size = grids_size || get_grid_size
     @player1_hits = @player2_hits = 0
+    @total_missiles = 0
     @player1 = Player.new(name: 'Player 1', grid_size: @grid_size)
     @player2 = Player.new(name: 'Player 2', grid_size: @grid_size)
   end
@@ -22,23 +24,22 @@ class Game
   def start
     place_ships
 
-    total_missiles = get_total_missiles
-
-    if total_missiles <= 0
-      puts "Number of missiles should be greater than 0"
-      return
+    @total_missiles = get_total_missiles
+    
+    if @total_missiles.to_i <= 0
+      return "Number of missiles should be greater than 0"
     end
 
-    p1_moves = @player1.get_moves
-    p2_moves = @player2.get_moves
+    @p1_moves = @player1.get_moves
+    @p2_moves = @player2.get_moves
 
     puts "Player 1's turn:"
     @player2.display_grid
-    p2_moves.each{|move| @player1.hit(*move) }
+    @p2_moves.each{|move| @player1.hit(*move) }
 
     puts "Player 2's turn:"
     @player1.display_grid
-    p1_moves.each {|move| @player2.hit(*move) }
+    @p1_moves.each {|move| @player2.hit(*move) }
 
     @player1_hits, @player2_hits = @player1.hits_count, @player2.hits_count
 
@@ -51,7 +52,7 @@ class Game
     puts 'Player1'
     print @player1.display_grid
     puts ''
-    puts 'Player1'
+    puts 'Player2'
     print @player2.display_grid
     puts ''
     puts "P1:#{@player1_hits}"
